@@ -4,4 +4,5 @@ public class BodyAppender {
 
 	 public String append(String existing, String next) {
      return next + "|" + existing;
- }}
+ }
+}
