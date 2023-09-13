@@ -1,21 +1,24 @@
 package guru.bonacci.camel.aggregator;
 
-import java.awt.Choice;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.camel.builder.AggregationStrategies;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.spi.AggregationRepository;
 import org.springframework.stereotype.Component;
 
 import guru.bonacci.camel.aggregator.beans.BodyAppender;
 import guru.bonacci.camel.aggregator.beans.MyAggregateController;
 import guru.bonacci.camel.aggregator.beans.Randomizer;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class SimpleRouteBuilder extends RouteBuilder {
 
+	private final AggregationRepository repo;
 	
 	@Override
 	public void configure() throws Exception {
@@ -49,6 +52,7 @@ public class SimpleRouteBuilder extends RouteBuilder {
 				.completionTimeout(8000)
 				.completionPredicate(header("flush").isNotNull())
 				.aggregateController(controller)	
+				.aggregationRepository(repo)
 				.to("direct:print");
 
 	  from("direct:print")
